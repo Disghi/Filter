@@ -11,13 +11,29 @@ import sys
 import os
 from psycopg2 import Error
 
+
+class QuestWindow(QWidget):
+    def __init__(self):
+        super(QuestWindow, self).__init__()
+        uic.loadUi('ui/Quest.ui', self)
+        self.pushButton.clicked.connect(self.click)
+    def click(self):
+        quest.hide()
+
+        
 class MainWindow(QDialog):
     def __init__(self):
         super(MainWindow, self).__init__()
         uic.loadUi('ui/Filter.ui', self)
         self.pushButton_4.clicked.connect(self.getDirectory)
         self.pushButton.clicked.connect(self.filter)
+        self.pushButton_2.clicked.connect(self.click)
+        self.pushButton_3.clicked.connect(self.exit)
         
+    def click(self):
+        quest.show()
+    def exit(self):
+        sys.exit(app.exec_())
     def getDirectory(self):
         dirlist = QFileDialog.getExistingDirectory(self,"Выбрать папку",".")
         self.lineEdit_2.setText(str(dirlist))
@@ -51,11 +67,18 @@ class MainWindow(QDialog):
             f2.close()
             os.startfile('log\\text.txt')           
         except (Exception, Error) as error:
-            print("Ошибка при работе с PostgreSQL", error)
+            msg = QMessageBox()
+            msg.setIcon(QMessageBox.Critical)
+            msg.setText("Ошибка")
+            msg.setInformativeText('Не удаётся найти указанный путь')
+            msg.setWindowTitle("Error")
+            msg.exec_()
+        
     
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
+    quest=QuestWindow()
     main=MainWindow()
     main.show()
     sys.exit(app.exec_())
