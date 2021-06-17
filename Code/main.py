@@ -52,7 +52,7 @@ class MainWindow(QDialog):
                         f2.write("В названии файла "+i+" найдена фраза\n")
                         d=1
                       
-                    f = open(i, 'r')
+                    f = open(self.lineEdit_2.text()+"/"+i, 'r')
                     if (f.read().find(a) != -1) :
                             f2.write("В содержимом файла файла "+i+" найдена фраза\n")
                             d=1
@@ -67,12 +67,7 @@ class MainWindow(QDialog):
             f2.close()
             os.startfile('log\\text.txt')           
         except (Exception, Error) as error:
-            msg = QMessageBox()
-            msg.setIcon(QMessageBox.Critical)
-            msg.setText("Ошибка")
-            msg.setInformativeText('Не удаётся найти указанный путь')
-            msg.setWindowTitle("Error")
-            msg.exec_()
+            print(error)
         
     
 
